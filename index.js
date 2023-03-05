@@ -29,7 +29,7 @@ app.use('/api/carreras',require('./routes/carreras.js'));
 app.use('/api/libros',require('./routes/libros.js'));
 
 
-server.listen(process.env.PORT, (err) => {
+server.listen(process.env.PORT || 3000, (err) => {
 if(err) throw new Error(err);
 
 console.log('Servidor corriendo en puerto', process.env.PORT);

@@ -18,13 +18,13 @@ const LibroSchema = Schema({
         required:true,
     },
     vistos:{
-        type:int,
+        type:Number,
     },
     like:{
-        type:int,
+        type:Number,
     },
     cantidad:{
-        type:int
+        type:Number,
     }
 });
 
@@ -34,4 +34,4 @@ LibroSchema.method('toJSON',function(){
     return object;
 });
 
-module.exports = model('Libro', UsuarioSchema);
+module.exports = model('Libro', LibroSchema);

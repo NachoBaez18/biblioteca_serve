@@ -1,10 +1,13 @@
 const {Router} = require('express');
-const { registrarCarrera,getCarreras } = require('../controller/carrera');
+const { gets, get, registrar, editar, eliminar } = require('../controller/libro');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 const router = Router();
 
-router.post('/',validarJWT,registrarCarrera);
-router.get('/listar',validarJWT,getCarreras);
+router.post('/',validarJWT,gets);
+router.post('/listar',validarJWT,get);
+router.post('/registrar',validarJWT,registrar);
+router.post('/editar',validarJWT,editar);
+router.post('/eliminar',validarJWT,eliminar);
 
 module.exports = router;

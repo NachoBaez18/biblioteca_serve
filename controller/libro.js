@@ -50,7 +50,7 @@ const gets = async (req ,res = response) =>{
 
 const get = async (req ,res = response) =>{
 
-    const uid = req.uid;
+    const uid = req.body.uid;
 
     try {
         const libro = await Libro.findById(uid);
