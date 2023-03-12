@@ -1,4 +1,4 @@
-const Carrera = require("../models/carrera");
+const Carrera = require("../models/Carrera");
 const {response} = require('express');
 
 const registrarCarrera = async (req ,res = response) =>{

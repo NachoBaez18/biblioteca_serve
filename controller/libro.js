@@ -1,4 +1,4 @@
-const Libro = require("../models/libro");
+const Libro = require("../models/Libro");
 const {response} = require('express');
 
 const registrar = async (req ,res = response) =>{
