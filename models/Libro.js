@@ -5,6 +5,10 @@ const LibroSchema = Schema({
         type:String,
         required:true
     },
+    carrera:{
+        type:String,
+        required:true
+    },
     creador:{
         type:String,
         required:true

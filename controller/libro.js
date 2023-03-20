@@ -7,6 +7,7 @@ const registrar = async (req ,res = response) =>{
         const carrera = new Libro({
             nombre:req.body.nombre,
             creador:req.body.creador,
+            carrera:req.body.carrera,
             descripcion:req.body.descripcion,
             imagen:req.body.imagen,
             vistos:req.body.vistos,
@@ -50,14 +51,13 @@ const gets = async (req ,res = response) =>{
 
 const get = async (req ,res = response) =>{
 
-    const uid = req.body.uid;
-
+    const carrera = req.body.nombre;
     try {
-        const libro = await Libro.findById(uid);
+        const libro = await Libro.find({carrera:carrera});
 
         res.json({
             error:false,
-            libro
+            libros:libro
         });  
     } catch (error) {
         console.log(error);
@@ -75,6 +75,7 @@ const editar = async (req ,res = response) =>{
             $set:{
                 nombre:req.body.nombre,
                 creador:req.body.creador,
+                carrera:req.body.carrera,
                 descripcion:req.body.descripcion,
                 imagen:req.body.imagen,
                 vistos:req.body.vistos,
