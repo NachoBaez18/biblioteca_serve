@@ -1,4 +1,4 @@
-const  { Schema, model} = require('mongoose');
+const { Schema, model} = require('mongoose');
 
 const AccionLibroSchema = Schema({
     accion:{
@@ -6,19 +6,25 @@ const AccionLibroSchema = Schema({
         required:true
     },
     usuario:{
-        type:mongoose.Schema.Types.ObjectId, ref: 'Usuario',
+        type:Schema.Types.ObjectId, 
+        ref:'Usuario',
         required:true
     },
     libro:{
-        type:mongoose.Schema.Types.ObjectId, ref: 'Libro',
+        type:[Schema.Types.ObjectId], 
+        ref:'Libro',
         required:true
     },
     fecha:{
-        type:String,
+        type:Date,
         required:true,
     },
+    deleted_at:{
+        type:String,
+        required:true
+    }
+    
 });
-
 AccionLibroSchema.method('toJSON',function(){
     const {__v,_id, ...object} = this.toObject();
     object.uid = _id;

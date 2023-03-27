@@ -25,8 +25,9 @@ app.use(express.static(publicPath));
 app.use('/api/login',require('./routes/auth'));
 app.use('/api/usuarios',require('./routes/usuarios'));
 app.use('/api/mensajes',require('./routes/mensajes'));
-app.use('/api/carreras',require('./routes/carreras.js'));
-app.use('/api/libros',require('./routes/libros.js'));
+app.use('/api/carreras',require('./routes/carreras'));
+app.use('/api/libros',require('./routes/libros'));
+app.use('/api/accionLibro',require('./routes/accionLibro'));
 
 
 server.listen(process.env.PORT || 3000, (err) => {
