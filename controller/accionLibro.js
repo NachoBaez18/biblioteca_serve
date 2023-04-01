@@ -50,18 +50,29 @@ const gets = async (req ,res = response) =>{
 }
 
 const get = async (req ,res = response) =>{
-
-    const accion = req.body.accion;
-    const usuario = req.body.usuario;
+ 
+    const tipoFiltro = req.body.tipoFiltro;
     try {
-        const accionLibro = await AccionLibro.find({accion:accion,usuario:usuario,deleted_at:'N'})
+        if(tipoFiltro == 'accionXusuario'){
+            filtro = {
+                accion:req.body.accion,
+                usuario:req.body.usuario,
+                deleted_at:'N'
+            }
+        }else if(tipoFiltro == 'accion'){
+            filtro = {
+                accion:req.body.accion,
+                deleted_at:'N'
+            }
+        }
+        const accionLibro = await AccionLibro.find(filtro)
         .populate({ path: 'usuario', model: 'Usuario', select: '-password', options: { strictPopulate: false } })
         .populate({ path: 'libro', model: 'Libro', options: { strictPopulate: false } })
         .exec();
 
         res.json({
             error:false,
-            libros:accionLibro
+            accionesDeLibros:accionLibro
         });  
     } catch (error) {
         console.log(error);
