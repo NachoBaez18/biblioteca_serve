@@ -3,6 +3,8 @@ const {response} = require('express');
 
 const registrar = async (req ,res = response) =>{
     try {
+
+        console.log(validateReserva);
         const carrera = new AccionLibro({
             accion:req.body.accion,
             usuario:req.body.usuario,
@@ -50,7 +52,6 @@ const gets = async (req ,res = response) =>{
 }
 
 const get = async (req ,res = response) =>{
- 
     const tipoFiltro = req.body.tipoFiltro;
     try {
         if(tipoFiltro == 'accionXusuario'){
@@ -111,11 +112,11 @@ const editar = async (req ,res = response) =>{
 const eliminar = async (req ,res = response) =>{
 
     try {
-        
+        const today = new Date().toISOString();
         await AccionLibro.updateOne({_id:req.body.uid},{
             $set:{
-                fecha:req.body.fecha,
-                deleted_at:req.body.deleted_at,
+                fecha:today,
+                deleted_at:'S',
             }
         });
 
@@ -133,11 +134,48 @@ const eliminar = async (req ,res = response) =>{
     }
 }
 
+const elimiarOrEditar = async (req ,res = response) =>{
+    try {
+        const accionLibro = await AccionLibro.find({_id:req.body.uid})
+
+        if(accionLibro[0].libro.length == 1){
+            //Si era solamente un libro eliminamos la reserva
+            const today = new Date().toISOString();
+            await AccionLibro.updateOne({_id:req.body.uid},{
+                $set:{
+                    fecha:today,
+                    deleted_at:'S',
+                }
+            });
+        }else{
+            nuevoArray = accionLibro[0].libro.filter(item => item !== req.body.libro)
+            const today = new Date().toISOString();
+            await AccionLibro.updateOne({_id:req.body.uid},{
+                $set:{
+                    fecha:today,
+                    libro:nuevoArray,
+                }
+            });
+        }
+        res.json({
+            error:false,
+            mensaje:'Libro eliminado de la reserva'
+        });  
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error:true,
+            mensaje_error:error,
+            mensaje:'No se pudo listar las acciones'
+        });
+    }
+}
 
 module.exports = {
     registrar,
     gets,
     get,
     editar,
-    eliminar
+    eliminar,
+    elimiarOrEditar
 }
