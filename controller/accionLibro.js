@@ -1,10 +1,10 @@
 const AccionLibro = require("../models/accionLibro");
 const {response} = require('express');
+const mongoose = require('mongoose');
 
 const registrar = async (req ,res = response) =>{
     try {
 
-        console.log(validateReserva);
         const carrera = new AccionLibro({
             accion:req.body.accion,
             usuario:req.body.usuario,
@@ -170,6 +170,54 @@ const elimiarOrEditar = async (req ,res = response) =>{
         });
     }
 }
+const registrarOrEditar = async (req ,res = response) =>{
+    try {
+        const today = new Date().toISOString();
+        const accionLibro = await AccionLibro.findOne({usuario:req.body.usuario,deleted_at:'N',accion:'reservado'});
+        if(accionLibro == null){
+            //!vamos a registrar un reserva
+        const accion = new AccionLibro({
+            accion:'reservado',
+            usuario:req.body.usuario,
+            libro:req.body.libro,
+            fecha:today,
+            deleted_at:'N',
+        });
+        await accion.save();
+        res.json({
+            error:false,
+            mensaje:'Reserva generada exitosamente'
+        }); 
+        }else{
+             //!vamos agregar un libro mas a la reserva   
+             const nuevoLibroIdStr = req.body.libro.toString();
+             const nuevoLibroId = mongoose.Types.ObjectId(nuevoLibroIdStr);
+             const contieneLibro = accionLibro.libro.includes(nuevoLibroId)
+             if(contieneLibro){
+                res.json({
+                    error:true,
+                    mensaje:'Error al reservar ya contiene en su reserva el libro seleccionado'
+                });
+             }else{
+                accionLibro.libro.push(nuevoLibroId)
+                await accionLibro.save();
+                res.json({
+                    error:false,
+                    mensaje:'Reserva generada exitosamente'
+                }); 
+             }
+             
+        }   
+        
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error:true,
+            mensaje_error:error,
+            mensaje:'No se pudo listar las acciones'
+        });
+    }
+}
 
 module.exports = {
     registrar,
@@ -177,5 +225,6 @@ module.exports = {
     get,
     editar,
     eliminar,
-    elimiarOrEditar
+    elimiarOrEditar,
+    registrarOrEditar
 }
