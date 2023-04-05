@@ -136,30 +136,31 @@ const eliminar = async (req ,res = response) =>{
 
 const elimiarOrEditar = async (req ,res = response) =>{
     try {
-        const accionLibro = await AccionLibro.find({_id:req.body.uid})
+        const today = new Date().toISOString();
+        const accionLibro = await AccionLibro.findOne({usuario:req.body.usuario,deleted_at:'N',accion:'reservado'});
 
-        if(accionLibro[0].libro.length == 1){
+        if(accionLibro.libro.length == 1){
             //Si era solamente un libro eliminamos la reserva
-            const today = new Date().toISOString();
-            await AccionLibro.updateOne({_id:req.body.uid},{
-                $set:{
-                    fecha:today,
-                    deleted_at:'S',
-                }
-            });
+            accionLibro.fecha = today;
+            accionLibro.deleted_at = 'S';
+            await accionLibro.save();
         }else{
-            nuevoArray = accionLibro[0].libro.filter(item => item !== req.body.libro)
-            const today = new Date().toISOString();
-            await AccionLibro.updateOne({_id:req.body.uid},{
-                $set:{
-                    fecha:today,
-                    libro:nuevoArray,
-                }
+        const  elementoBuscar = mongoose.Types.ObjectId(req.body.libro);
+        //!aqui vemos el indice para despues eliminar ese objeto del array
+        const i = accionLibro.libro.findIndex(objeto => objeto.toString() === elementoBuscar.toString());
+          if(i >= 0){
+            accionLibro.libro.splice(i,1);
+            await accionLibro.save();
+          }else{
+            res.json({
+                error:true,
+                mensaje:'Error al tratar de eliminar la reserva'
             });
+          }
         }
         res.json({
             error:false,
-            mensaje:'Libro eliminado de la reserva'
+            mensaje:'Libro eliminado exitosamente de la reserva'
         });  
     } catch (error) {
         console.log(error);
