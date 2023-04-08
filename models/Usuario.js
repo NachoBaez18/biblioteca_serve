@@ -18,6 +18,18 @@ const UsuarioSchema = Schema({
         type:String,
         required:true
     },
+    telefono:{
+        type:String,
+        required:false
+    },
+    carrera:{
+        type:String,
+        required:false
+    },
+    semestre:{
+        type:String,
+        required:false
+    },
     online:{
         type:Boolean,
         default:false

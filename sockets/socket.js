@@ -1,7 +1,7 @@
 
-const { comprobarJWT } = require('../helpers/jwt');
-const {io} = require('../index');
-const {usuarioConectado, usuarioDesconectado, grabarMensaje} = require('../controller/sokect');
+// const { comprobarJWT } = require('../helpers/jwt');
+// const {io} = require('../index');
+// const {usuarioConectado, usuarioDesconectado, grabarMensaje} = require('../controller/sokect');
 
 
 
@@ -13,35 +13,34 @@ const {usuarioConectado, usuarioDesconectado, grabarMensaje} = require('../contr
 // bands.addBand(new Band('Metalica'));
 
 
-io.on('connection', (client) => {
+// io.on('connection', (client) => {
 
+//     const [valido, uid] = comprobarJWT(client.handshake.headers['x-token']);
 
-    const [valido, uid] = comprobarJWT(client.handshake.headers['x-token']);
+//     ///*verificar autenticacion
+//     if(!valido){return client.discononnect();}
+//     console.log('Cliente autenticado');
+//      usuarioConectado(uid)
 
-    ///*verificar autenticacion
-    if(!valido){return client.discononnect();}
-    console.log('Cliente autenticado');
-     usuarioConectado(uid)
+//      //* Ingresar al usuario a una sala en particular
+//      //* Sala global
+//      client.join(uid);
 
-     //* Ingresar al usuario a una sala en particular
-     //* Sala global
-     client.join(uid);
+//      //! Escuchar del cliente el mensaje-personal
+//      client.on('mensaje-personal',async(payload)=>{
+//      //?grabar mensaje
 
-     //! Escuchar del cliente el mensaje-personal
-     client.on('mensaje-personal',async(payload)=>{
-     //?grabar mensaje
+//       data =  await grabarMensaje(payload);
+//       console.log(data);
 
-      data =  await grabarMensaje(payload);
-      console.log(data);
+//       io.to(payload.para).emit('mensaje-personal',payload);
+//      });
 
-      io.to(payload.para).emit('mensaje-personal',payload);
-     });
-
-    //client.emit('active-bands',bands.getBands());
-    client.on('disconnect', () => {
+//     //client.emit('active-bands',bands.getBands());
+//     client.on('disconnect', () => {
       
-      usuarioDesconectado(uid);
-      console.log('Cliente desconectado'); });
+//       usuarioDesconectado(uid);
+//       console.log('Cliente desconectado'); });
 
 
     // client.on('mensaje',(payload) => {
@@ -71,4 +70,4 @@ io.on('connection', (client) => {
     //     bands.deleteBand(data.id);
     //     io.emit('active-bands',bands.getBands());
     // });
-  });
+  // });

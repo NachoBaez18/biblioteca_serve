@@ -16,7 +16,7 @@ const AccionLibroSchema = Schema({
         required:true
     },
     fecha:{
-        type:Date,
+        type:String,
         required:true,
     },
     deleted_at:{

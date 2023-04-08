@@ -3,7 +3,6 @@ const Usuario = require('../models/Usuario');
 
 const getUsuarios = async (req, res = response) => {
     try {
-
         const desde = Number(req.query.desde) || 0;
 
         const usuarios  = await Usuario

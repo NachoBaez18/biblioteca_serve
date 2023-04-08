@@ -29,6 +29,9 @@ app.use('/api/carreras',require('./routes/carreras'));
 app.use('/api/libros',require('./routes/libros'));
 app.use('/api/accionLibro',require('./routes/accionLibro'));
 
+// ? Mis crons
+const crons = require('./crons/cron');
+
 
 server.listen(process.env.PORT || 3000, (err) => {
 if(err) throw new Error(err);
