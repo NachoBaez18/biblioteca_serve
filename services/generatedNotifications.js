@@ -9,9 +9,10 @@ const data = {
 // Configura las opciones de la petición POST
 const options = {
   method: 'POST',
-  url: 'http://localhost:3000/login',
+  url: 'https://fcm.googleapis.com/fcm/send',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization':''
   },
   data: data
 };
