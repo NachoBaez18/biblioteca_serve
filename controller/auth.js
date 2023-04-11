@@ -47,7 +47,7 @@ const crearusuario = async(req , res = response) => {
 
 const login = async(req , res = response) => {
 
-    const {email , password} = req.body;
+    const {email , password,divice} = req.body;
 
     try {
         const usuarioDB = await Usuario.findOne({email});
@@ -69,10 +69,13 @@ const login = async(req , res = response) => {
                 msg:'Contraseña no valida'
             });
         }
-
+        //verificamos si el divice es el mismo y si no le asignamos uno nuevo
+        if(usuarioDB.dispositivo == null || usuarioDB.dispositivo != divice ){
+            usuarioDB.dispositivo = divice;
+        }
         //Generar token
         const token = await generarJWT(usuarioDB.id);
-
+        usuarioDB.save();
         res.json({
             ok:true,
             usuario:usuarioDB,

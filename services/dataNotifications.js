@@ -2,7 +2,7 @@ const AccionLibro = require("../models/accionLibro");
 const moment = require('moment-timezone');
 
 
-const librosNoEntregadosFecha = async () =>{
+const reservasExpirados = async () =>{
     try {
         const fechaActual = moment().tz('America/Asuncion');
         const fechaLimite = fechaActual.subtract(1, 'minute').toISOString();
@@ -28,5 +28,5 @@ const librosNoEntregadosFecha = async () =>{
     }
 }
 module.exports = {
-    librosNoEntregadosFecha  
+    reservasExpirados  
 }

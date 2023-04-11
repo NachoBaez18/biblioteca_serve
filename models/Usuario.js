@@ -26,8 +26,8 @@ const UsuarioSchema = Schema({
         type:String,
         required:false
     },
-    dispotivos:{
-        type:[],
+    dispositivo:{
+        type:String,
         required:false
     },
     semestre:{
