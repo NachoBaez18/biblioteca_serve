@@ -28,6 +28,7 @@ app.use('/api/mensajes',require('./routes/mensajes'));
 app.use('/api/carreras',require('./routes/carreras'));
 app.use('/api/libros',require('./routes/libros'));
 app.use('/api/accionLibro',require('./routes/accionLibro'));
+app.use('/api/notificacion',require('./routes/notificacion'));
 
 // ? Mis crons
 const crons = require('./crons/cron');

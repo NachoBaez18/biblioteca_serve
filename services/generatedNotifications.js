@@ -1,7 +1,4 @@
 const axios = require('axios');
-
-
-
 const createNotifications = async (id_dispositivo, titulo, mensaje) => {
 
   // Define los datos a enviar
