@@ -30,11 +30,13 @@ const registrar = async (req ,res = response) =>{
         });
     }
 }
-
 const gets = async (req ,res = response) =>{
 
     try {
-        const accionesDeLibros  = await AccionLibro.find({deleted_at:'N'})
+        const fechaActual = moment().tz('America/Asuncion');
+        const fechaLimite = fechaActual.subtract(3, 'days').toISOString();
+
+        const accionesDeLibros  = await AccionLibro.find({deleted_at:'N',fecha:{ $lt: fechaLimite },accion:"entregado"})
         .populate({ path: 'usuario', model: 'Usuario', select: '-password', options: { strictPopulate: false } })
         .populate({ path: 'libro', model: 'Libro', options: { strictPopulate: false } })
         .exec();
@@ -56,13 +58,27 @@ const gets = async (req ,res = response) =>{
 
 const get = async (req ,res = response) =>{
     const tipoFiltro = req.body.tipoFiltro;
+    const accion = req.body.accion;
+    const fechaActual = moment().tz('America/Asuncion');
+    const fechaLimite = fechaActual.subtract(3, 'days').toISOString();
     try {
         if(tipoFiltro == 'accionXusuario'){
-            filtro = {
-                accion:req.body.accion,
-                usuario:req.body.usuario,
-                deleted_at:'N'
+            if(accion == 'entregado'){
+                filtro = {
+                    accion:req.body.accion,
+                    usuario:req.body.usuario,
+                    fecha:{ $lt: fechaLimite },
+
+                    deleted_at:'N'
+                }
+            }else{
+                filtro = {
+                    accion:req.body.accion,
+                    usuario:req.body.usuario,
+                    deleted_at:'N'
+                }
             }
+           
         }else if(tipoFiltro == 'accion'){
             filtro = {
                 accion:req.body.accion,
