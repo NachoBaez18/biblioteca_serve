@@ -106,24 +106,23 @@ const get = async (req ,res = response) =>{
 const editar = async (req ,res = response) =>{
 
     try {
+        const today = new Date().toISOString();
         await AccionLibro.updateOne({_id:req.body.uid},{
             $set:{
                 accion:req.body.accion,
-                usuario:req.body.usuario,
-                libro:req.body.libro,
-                fecha:req.body.fecha,
+                fecha:today,
             }
         });
         res.json({
             error:false,
-            mensaje:'Accion actualizada correctamente',
+            mensaje:'Accion realizada correctamente accion: '+req.body.accion,
         });
     } catch (error) {
         console.log(error);
         res.json({
             error:true,
             mensaje_error:error,
-            mensaje:'No pudo hacerce el edicion de la Accion'
+            mensaje:'No pudo hacerce la Accion'
         });
     }
 }
@@ -131,10 +130,10 @@ const editar = async (req ,res = response) =>{
 const eliminar = async (req ,res = response) =>{
 
     try {
-        const today = new Date().toISOString();
+        const fechaActual = moment().tz('America/Asuncion').toISOString();
         await AccionLibro.updateOne({_id:req.body.uid},{
             $set:{
-                fecha:today,
+                fecha:fechaActual,
                 deleted_at:'S',
             }
         });
