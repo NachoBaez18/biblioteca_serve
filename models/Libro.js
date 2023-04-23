@@ -22,10 +22,10 @@ const LibroSchema = Schema({
         required:true,
     },
     vistos:{
-        type:Number,
+        type:[],
     },
     like:{
-        type:Number,
+        type:[],
     },
     cantidad:{
         type:Number,
