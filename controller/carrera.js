@@ -26,7 +26,7 @@ const registrarCarrera = async (req ,res = response) =>{
 const getCarreras = async (req ,res = response) =>{
 
     try {
-        const carreras = await Carrera.find();
+        const carreras = await Carrera.find({activo:'S'});
 
         res.json({
             error:false,

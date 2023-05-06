@@ -159,20 +159,7 @@ const UpdateUser = async(req,res = response) => {
     const {uid,nombre,telefono,email} = req.body;
 
     try {
-        const usuarioDB = await Usuario.findOne({uid});
-        if(!usuarioDB){
-            return res.json({
-                error:true,
-                mensaje:'Usuario no encontrado'
-            });
-        }
-
-        usuarioDB.nombre = nombre;
-        usuarioDB.telefono = telefono;
-        usuarioDB.email = email;
-
-        await usuarioDB.save();
-
+        const usuarioDB = await Usuario.findByIdAndUpdate(uid,{nombre:nombre,telefono:telefono,email:email},{new:true});
         res.json({
             error:false,
             usuario:usuarioDB,

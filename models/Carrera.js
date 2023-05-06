@@ -5,6 +5,10 @@ const CarreraSchema = Schema({
         type:String,
         required:true
     },
+    activo:{
+        type:String,
+        default:'S'
+    }
 });
 
 CarreraSchema.method('toJSON',function(){
