@@ -24,7 +24,7 @@ const UsuarioSchema = Schema({
     },
     carrera:{
         type:String,
-        required:false
+        required:true
     },
     dispositivo:{
         type:String,

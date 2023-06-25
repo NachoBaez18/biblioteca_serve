@@ -23,6 +23,50 @@ const registrarCarrera = async (req ,res = response) =>{
     }
 }
 
+const editar = async (req, res = response) => {
+
+    try {
+        await Carrera.updateOne({ _id: req.body.uid }, {
+            $set: {
+                nombre: req.body.nombre,
+            }
+        });
+        res.json({
+            error: false,
+            mensaje: 'Carrera actualizada correctamente',
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: true,
+            mensaje_error: error,
+            mensaje: 'No pudo hacerce la actualizacion de la carrera'
+        });
+    }
+}
+
+const eliminar = async (req, res = response) => {
+
+    try {
+        await Carrera.updateOne({ _id: req.body.uid }, {
+            $set: {
+                activo: 'N',
+            }
+        });
+        res.json({
+            error: false,
+            mensaje: 'Carrera eliminada correctamente',
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: true,
+            mensaje_error: error,
+            mensaje: 'No pudo hacerce la elimacion de la carrera'
+        });
+    }
+}
+
 const getCarreras = async (req ,res = response) =>{
 
     try {
@@ -46,5 +90,8 @@ const getCarreras = async (req ,res = response) =>{
 
 module.exports = {
     registrarCarrera,
-    getCarreras
+    getCarreras,
+    editar,
+    eliminar
+
 }

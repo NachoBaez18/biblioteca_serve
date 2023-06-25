@@ -176,11 +176,33 @@ const UpdateUser = async(req,res = response) => {
     }
 
 }
+const eliminar = async (req, res = response) => {
+
+    try {
+        await Usuario.updateOne({ _id: req.body.uid }, {
+            $set: {
+                online: false,
+            }
+        });
+        res.json({
+            error: false,
+            mensaje: 'Usuario eliminado correctamente',
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: true,
+            mensaje_error: error,
+            mensaje: 'No pudo hacerce la elimacion del usuario'
+        });
+    }
+}
 
 module.exports = {
     crearusuario,
     login,
     renewToken,
     cambioContrasena,
-    UpdateUser
+    UpdateUser,
+    eliminar
 }

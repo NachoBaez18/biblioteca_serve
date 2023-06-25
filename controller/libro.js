@@ -26,7 +26,7 @@ const registrar = async (req, res = response) => {
         res.json({
             error: true,
             mensaje_error: error,
-            mensaje: 'No pudo hacerce el registro del Libro'
+            mensaje: 'No pudo hacerse el registro del Libro'
         });
     }
 }
