@@ -1,98 +1,97 @@
 const bcryptjs = require('bcryptjs');
-const {response} = require('express');
+const { response } = require('express');
 const { generarJWT } = require('../helpers/jwt');
 const Usuario = require('../models/Usuario');
 
-const crearusuario = async(req , res = response) => {
-    const {email , password} = req.body;
+const crearusuario = async (req, res = response) => {
+    const { password } = req.body;
 
     try {
 
-        const existeEmail = await Usuario.findOne({email});
+        //const existeEmail = await Usuario.findOne({email});
 
-        if(existeEmail){
-            return res.status(400).json({
-                ok:false,
-                msg:'El correo ya esta registrado'
-            });
-        }
+        // if(existeEmail){
+        //     return res.status(400).json({
+        //         ok:false,
+        //         msg:'El correo ya esta registrado'
+        //     });
+        // }
 
         const usuario = new Usuario(req.body);
 
         //encriptar contraseña
 
         const salt = bcryptjs.genSaltSync();
-        usuario.password = bcryptjs.hashSync(password ,salt);
+        usuario.password = bcryptjs.hashSync(password, salt);
 
         await usuario.save();
 
         // Generar mi JWT
 
-        const token = await generarJWT(usuario.id);
-     
-         res.json({
-             ok:true,
-             usuario,
-             token
-         })
+        // const token = await generarJWT(usuario.id);
+
+        res.json({
+            ok: true,
+            usuario,
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            ok:false,
+            ok: false,
             msg: 'Hable con el admimistrador'
         });
-        
+
     }
 }
 
-const login = async(req , res = response) => {
+const login = async (req, res = response) => {
 
-    const {email , password,divice} = req.body;
+    const { email, password, divice } = req.body;
 
     try {
-        const usuarioDB = await Usuario.findOne({email});
-        if(!usuarioDB){
+        const usuarioDB = await Usuario.findOne({ email });
+        if (!usuarioDB) {
             return res.status(404).json({
-                ok:false,
-                msg:'Email no encontrado'
+                ok: false,
+                msg: 'Email no encontrado'
             });
         }
 
         //validar password
 
-        const validarPassword = bcryptjs.compareSync(password , usuarioDB.password);
+        const validarPassword = bcryptjs.compareSync(password, usuarioDB.password);
 
-        if(!validarPassword) {
+        if (!validarPassword) {
 
             return res.status(404).json({
-                ok:false,
-                msg:'Contraseña no valida'
+                ok: false,
+                msg: 'Contraseña no valida'
             });
         }
         //verificamos si el divice es el mismo y si no le asignamos uno nuevo
-        if(usuarioDB.dispositivo == null || usuarioDB.dispositivo != divice ){
+        if (usuarioDB.dispositivo == null || usuarioDB.dispositivo != divice) {
             usuarioDB.dispositivo = divice;
         }
         //Generar token
         const token = await generarJWT(usuarioDB.id);
         usuarioDB.save();
         res.json({
-            ok:true,
-            usuario:usuarioDB,
+            ok: true,
+            usuario: usuarioDB,
             token
         })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            ok:false,
+            ok: false,
             msg: 'Hable con el admimistrador'
         });
-        
+
     }
 }
 
-const renewToken = async(req, res = response) =>{
+const renewToken = async (req, res = response) => {
 
     const uid = req.uid;
 
@@ -101,78 +100,79 @@ const renewToken = async(req, res = response) =>{
     const usuario = await Usuario.findById(uid);
 
     res.json({
-        ok:true,
+        ok: true,
         usuario,
         token
     });
 
 }
 
-const cambioContrasena = async(req,res = response) => {
+const cambioContrasena = async (req, res = response) => {
 
     const uid = req.body.uid;
     const password = req.body.password;
     const passwordNew = req.body.passwordNew;
 
     try {
-        const usuarioDB = await Usuario.findOne({_id:uid});
-        if(!usuarioDB){
+        const usuarioDB = await Usuario.findOne({ _id: uid });
+        if (!usuarioDB) {
             return res.status(200).json({
-                error:true,
-                mensaje:'Usuario no encontrado'
+                error: true,
+                mensaje: 'Usuario no encontrado'
             });
         }
         //validar password
-        const validarPassword = bcryptjs.compareSync(password , usuarioDB.password);
+        const validarPassword = bcryptjs.compareSync(password, usuarioDB.password);
 
-        if(!validarPassword) {
+        if (!validarPassword) {
             return res.json({
-                error:true,
-                mensaje:'Contraseña no valida'
+                error: true,
+                mensaje: 'Contraseña no valida'
             });
         }
         const salt = bcryptjs.genSaltSync();
-        usuarioDB.password =  bcryptjs.hashSync(passwordNew ,salt);
+        usuarioDB.password = bcryptjs.hashSync(passwordNew, salt);
         usuarioDB.save();
         const token = await generarJWT(usuarioDB.id);
 
         res.json({
-            error:false,
-            mensaje:'Contraseña actualizada existosamente',
-            usuario:usuarioDB,
+            error: false,
+            mensaje: 'Contraseña actualizada existosamente',
+            usuario: usuarioDB,
             token
         })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            error:false,
+            error: false,
             mensaje: 'Hable con el admimistrador'
         });
-        
+
     }
 }
 
-const UpdateUser = async(req,res = response) => {
+const UpdateUser = async (req, res = response) => {
 
 
-    const {uid,nombre,telefono,email} = req.body;
+    const { uid, nombre, telefono, email, carrera, tipo } = req.body;
+    console.log(req.body);
 
     try {
-        const usuarioDB = await Usuario.findByIdAndUpdate(uid,{nombre:nombre,telefono:telefono,email:email},{new:true});
+        const usuarioDB = await Usuario.updateOne({ _id: uid }, { $set: { nombre: nombre, telefono: telefono, email: email, carrera: carrera, tipo: tipo } });
         res.json({
-            error:false,
-            usuario:usuarioDB,
-            mensaje:'Usuario actualizado exitosamente'
+            error: false,
+            usuario: usuarioDB,
+            mensaje: 'Usuario actualizado exitosamente'
         })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            error:true,
+            error: true,
             mensaje: 'Hable con el admimistrador'
         });
-        
+
     }
 
 }
