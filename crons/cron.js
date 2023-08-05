@@ -11,8 +11,8 @@ cron.schedule('*/1 * * * *', async () => {
     if (!response['error']) {
         if (response['accionesDeLibros'].length != 0) {
             for (const data of response['accionesDeLibros']) {
-               // await createNotifications(data['usuario']['dispositivo'].toString(), titulo, mensaje);
-               // await changeStatusAccion(data['_id'], titulo, mensaje);
+                await createNotifications(data['usuario']['dispositivo'].toString(), titulo, mensaje);
+                await changeStatusAccion(data['_id'], titulo, mensaje);
             };
         } else {
             console.log('No se encontro ningun registro para notificar');
@@ -32,8 +32,8 @@ cron.schedule('*/1 * * * *', async () => {
     if (!response['error']) {
         if (response['accionesDeLibros'].length != 0) {
             for (const data of response['accionesDeLibros']) {
-              //  await createNotifications(data['usuario']['dispositivo'].toString(), titulo, mensaje);
-              //  await generarNotificacion(data['_id'], titulo, mensaje,data['usuario']['_id']);
+                await createNotifications(data['usuario']['dispositivo'].toString(), titulo, mensaje);
+                await generarNotificacion(data['_id'], titulo, mensaje,data['usuario']['_id']);
             };
         } else {
             console.log('No se encontro ningun registro para notificar');

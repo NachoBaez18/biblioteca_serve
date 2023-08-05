@@ -192,7 +192,7 @@ const elimiarOrEditar = async (req, res = response) => {
 const registrarOrEditar = async (req, res = response) => {
     try {
         const accionLibro = await AccionLibro.findOne({ usuario: req.body.usuario, deleted_at: 'N' }).sort({ fecha: -1 });
-        if (accionLibro == null || accionLibro.accion == 'devuelto') {
+        if (accionLibro == null || accionLibro.accion == 'devuelto' || accionLibro.accion == 'cancelado') {
             console.log(fechaActual);
             //!vamos a registrar un reserva
             const accion = new AccionLibro({
